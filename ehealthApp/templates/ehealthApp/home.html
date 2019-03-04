@@ -1,0 +1,39 @@
+
+{% extends tmp %}
+
+
+{% if user.is_practitioner == True %}
+            Youre a medical practioner
+
+        {% else %}
+            youre a regular user
+        {% endif %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-sm-12 '>
+        <h3>A chart to show the number of register users that experienced these over the past year <br><br>
+        {% if user.is_practitioner == True %}
+            Youre a medical practioner
+        {% else %}
+            youre a regular user
+        {% endif %}
+
+        </h3><br><br>
+        <div class='col-sm-6' url-endpoint='{% url "api-data" %}'>
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+
+        
+        <div class='col-sm-6'>
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+       
+    </div>
+</div>
+
+    
+
+
+{% endblock content %}
