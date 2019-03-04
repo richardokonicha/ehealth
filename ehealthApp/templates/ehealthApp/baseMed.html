@@ -1,0 +1,141 @@
+
+{% load static %}
+<!-- to load in cdd for static directory for ehealthApp-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+      <!-- Bootstrap CSS -->
+      {% include 'ehealthApp/basefiles/css.html' %}
+      {% include 'ehealthApp/basefiles/bootstrap_defaults.html' %}
+        <!-- The JavaScript files here has to do with importing JavaScript CDN and setting Up the Charts so it can be called from any where -->
+      {% include 'ehealthApp/basefiles/js.html' %}
+
+
+      {% if title %}
+          <title>{{ title }}</title>
+      {% else %}
+          <title>Title load error</title>
+      {% endif %}
+    </head>
+    <body>
+
+
+      <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steelMed fixed-top">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="#">e h e a l t h -   I n c</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="{% url 'ehealth_home' %}">H o m e</a>
+                <a class="nav-item nav-link" href="{% url 'ehealth_about' %}">A b o u t</a>
+                
+              </div>
+
+              <!-- Navbar Right Side -->
+              <div class="navbar-nav">
+
+                  {% if user.is_authenticated %}
+                    {% if user.is_practitioner == True %}
+                    <a class="nav-item nav-link" href="{% url 'ehealth_tables' %}">Views Users Medical information</a>
+                    {% endif %}
+
+                      <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                  {% else %}
+                      <a class="nav-item nav-link" href="#">About</a>
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+        <main role="main" class="container">
+          <div class="row">
+            <div class="col-md-8">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+
+                {% endif %}
+
+              {% block content %}
+
+                {% endblock %}
+            </div>
+
+
+            <!-- The Profile/Status bar-->
+            {% if user.is_authenticated %}
+              <div class="col-md-4 " url-endpoint='{% url "api-data" %}' >
+                <div>
+                  <div class="media ">
+                    <img class="rounded-circle account-img" src="/media/medical.jpg">
+                    <div class="media-body ">
+                        <h6 class="text-muted">{{ user.username }}</h6>
+                        <p class="text-secondary">{{ user.email }}</p>
+                        <a href="{% url 'ehealth_tables' %}" class="btn btn-outline-info mr-4" >View Users</a>
+                    </div>
+                  </div>
+                  <p class='text-muted'>You are logged in as a medical is practitioner <p>
+                    You Can Access all Registered User data 
+                  </p>
+                    <br><br>
+                    <ul class="list-group">
+                      <li class="list-group-item list-group-item-light">Malaria:  {{ data.Malaria }}</li>
+                      <li class="list-group-item list-group-item-light">Diarrheal Diseases: {{ data.Diarrheal_Diseases }}</li>
+                      <li class="list-group-item list-group-item-light">Road Injuries: {{ data.Road_Injuries }}</li>
+                      <li class="list-group-item list-group-item-light">Tuberculosis: {{ data.Tuberculosis }}</li>
+                      
+                      <li class="list-group-item list-group-item-light">Cough: {{ data.Cough }}</li>
+                    </ul>
+                  
+                  </p>
+                  
+
+
+                </div>
+              </div>
+              
+            {% else %}
+              <div class="col-md-4">
+                <div class="content-section">
+                  <div class="media">
+                    <img class="rounded-circle account-img" src="/media/default.jpg">
+                    <div class="media-body">
+                        <h4 class="">Logged Out</h4>
+                        <p class="text-secondary">Don't have an account? create new account </p>
+                        <a href="{% url 'ehealth_register' %}" class="btn-outline-info" >Create Account Now</a>
+                        
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+
+              
+            {% endif %}
+            
+            <!-- The Profile/Status bar -->
+
+
+          </div>
+        </main>
+
+
+    
+
+    </body>
+</html>

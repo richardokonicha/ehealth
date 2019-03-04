@@ -1,0 +1,113 @@
+Metadata-Version: 1.0
+Name: betterpath
+Version: 0.2.2
+Summary: Path manipulation library
+Home-page: http://github.com/MostAwesomeDude/betterpath
+Author: Corbin Simpson
+Author-email: cds@corbinsimpson.com
+License: MIT/X11
+Description: ==========
+        betterpath
+        ==========
+        
+        betterpath, or "bp", is an adaptation of the classic Twisted ``FilePath`` type
+        and interface. bp provides a simple, robust, well-tested object abstraction
+        over file paths, generalizing the concept of file paths beyond filesystems.
+        
+        File Paths
+        ==========
+        
+        bp exposes an interface, ``bp.abstract.IFilePath``, for file paths, and
+        provides the following concrete implementations:
+        
+         * ``bp.filepath.FilePath``, for the root filesystem
+         * ``bp.zippath.ZipPath``, for ZIP archives
+         * ``bp.memory.MemoryPath``, for in-memory temporary filesystems
+        
+        In addition, there are combining abstract file paths which can be wrapped
+        around other file paths:
+        
+         * ``bp.readonly.ReadOnlyPath``, for read-only filesystems
+        
+        API documentation is available at http://betterpath.rtfd.org/.
+        
+        Vs. the Competition
+        ===================
+        
+        os.path
+        -------
+        
+        The venerable champ, ``os.path`` has been the cause of (and solution to) most
+        of Python's path problems over the years.
+        
+        Pros
+        ~~~~
+        
+        * In the standard library
+        
+        Cons
+        ~~~~
+        
+        * Unsafe
+        * Verbose
+        * Operates on strs
+        * No interfaces or ABCs for functionality
+        * Only covers the root filesystem
+        
+        pathlib
+        -------
+        
+        pathlib hopes to carve a path towards greatness through PEP 428.
+        
+        Pros
+        ~~~~
+        
+        * Convenient ``__div__()`` overloading
+        
+        Cons
+        ~~~~
+        
+        * No interfaces or ABCs for functionality
+        * Only covers the root filesystem
+        
+        Examples
+        ========
+        
+        Saving Data to Disk
+        -------------------
+        
+        The Old Way
+        ~~~~~~~~~~~
+        
+        ::
+        
+            def save(base, fragments, data):
+                # `fragments` could contain unsafe paths!
+                if ".." in fragments or "." in fragments:
+                    raise ValueError("Unsafe paths!")
+                path = os.path.join(os.path.abspath(base), os.sep.join(fragments))
+                # Alternatively: path = os.path.join(os.path.abspath(base), *fragments)
+                # I hope that this doesn't fail mid-write! Also, did the directories
+                # exist? I think so, yes.
+                with open(path, "wb") as handle:
+                    handle.write(data)
+        
+        The New Way
+        ~~~~~~~~~~~
+        
+        ::
+        
+            def save(base, fragments, data):
+                path = base.descendant(fragments)        
+                path.parent().makeDirs()
+                path.setContent(data)
+        
+        Changelog
+        =========
+        
+        0.2
+        ---
+        
+        * Initial release
+        
+Platform: UNKNOWN

@@ -1,0 +1,108 @@
+
+
+
+{% extends "ehealthApp/baseMed.html" %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+  <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filter</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.Malaria.label_tag }}
+          {% render_field filter.form.Malaria class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.Diarrheal_Diseases.label_tag }}
+          {% render_field filter.form.Diarrheal_Diseases class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.Road_Injuries.label_tag }}
+          {% render_field filter.form.Road_Injuries class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.Tuberculosis.label_tag }}
+          {% render_field filter.form.Tuberculosis class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+            {{ filter.form.Cough.label_tag }}
+            {% render_field filter.form.Cough class="form-control" %}
+          </div>
+        
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Search
+      </button>
+    </div>
+  </form>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Users</th>
+        <th>Malaria</th>
+        <th>Diarrheal Diseases</th>
+        <th>Road_Injuries</th>
+        <th>Tuberculosis</th>
+        <th>Cough</th>
+        <th>Groups</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in filter.qs %}
+        <tr>
+          <td>{{ user.user }}</td>
+          <td>{{ user.Malaria }}</td>
+          <td>{{ user.Diarrheal_Diseases }}</td>
+          <td>{{ user.Road_Injuries }}</td>
+          <td>{{ user.Tuberculosis }}</td>
+          <td>{{ user.Cough }}</td>
+          <td>
+            {% for group in user.groups.all %}
+              {{ group }}
+            {% empty %}
+              <em class="text-muted">No group</em>
+            {% endfor %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+
+<!------------------------>
+
+{% extends "ehealthApp/baseMed.html" %}
+
+{% block content %}
+
+{% load render_table from django_tables2 %}
+
+
+
+
+    <h1>
+        This is the about page, i will write about this project and how i manage to contruct the whole shit  <br><br>RESPECT MY AUTHORITY
+    </h1>
+
+
+    <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit">Search</button>
+      </form>
+      <ul>
+      {% for user in filter.qs %}
+        <li>{{ user.user }} </li>
+      {% endfor %}
+      </ul>
+      
+    {% render_table table %}
+
+{% endblock content %}

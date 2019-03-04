@@ -1,0 +1,29 @@
+Metadata-Version: 1.1
+Name: l
+Version: 0.11.0
+Summary: A project-oriented directory lister
+Home-page: https://github.com/Julian/L
+Author: Julian Berman
+Author-email: Julian@GrayVines.com
+License: MIT
+Description: =
+        L
+        =
+        
+        ``L`` is a more project-oriented directory lister.
+        
+        It's essentially ``ls`` with support for VCS ``ignore`` files.
+        
+        Yeah, it's just called L.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy

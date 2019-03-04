@@ -1,0 +1,31 @@
+{% extends "ehealthApp/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Create Medical Practitioner Account </legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Create Medical Practitioner Account</button>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+            </small>
+        </div>
+
+        <div class="border-top pt-3">
+            <small class="">
+                Create Normal User Account <a class="ml-2" href="{% url 'ehealthMed_register' %}">Here</a>
+            </small>
+        </div>
+    </div>
+
+
+    
+{% endblock content %}
