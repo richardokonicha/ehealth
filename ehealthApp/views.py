@@ -11,23 +11,12 @@ from .forms import UserRegisterForm, MedRegisterForm
 from django.views.generic import CreateView, ListView, UpdateView
 from django_tables2 import RequestConfig
 from .table import ProfileTable
-
 from .filter import UserFilter
-from django_filters.views import FilterView
-from django_tables2.views import SingleTableMixin
 from .models import User
 
 
-
-#User = get_user_model()
-@login_required
-def ehealth_home(request):
-    profile = request.user.profile
-    if request.user.is_regular==True:
-        tmp = 'ehealthApp/base.html'
-    else:
-        tmp = 'ehealthApp/baseMed.html'
-
+def value_count():
+    '''This function counts the number of user that selected Yes to a Category and returns a dictionary'''
     users= User.objects.all()
     Malaria_number, Diarrheal_number, Road_number, Tuberculosis_number, Cough_number = 0,0,0,0,0
     for i in users:
@@ -41,57 +30,68 @@ def ehealth_home(request):
             Tuberculosis_number += 1
         if i.profile.Cough=='Yes':
             Cough_number += 1
-    labels = ['Malaria', 'Diarrheal_Diseases', 'Road_Injuries', 'Tuberculosis','Cough']
-    value = [Malaria_number, Diarrheal_number, Road_number, Tuberculosis_number, Cough_number]
-
-    data = {
+    value = {
         'Malaria': Malaria_number, 
         'Diarrheal_Diseases': Diarrheal_number, 
         'Road_Injuries': Road_number,
         'Tuberculosis': Tuberculosis_number,
         'Cough': Cough_number
     }
+    return value
 
+value = value_count()
+#User = get_user_model()
+
+@login_required
+def ehealth_home(request):
+    profile = request.user.profile
+    if request.user.is_regular==True:
+        tmp = 'ehealthApp/base.html'
+    else:
+        tmp = 'ehealthApp/baseMed.html'
     context = {
         'profile': profile,
         'tmp': tmp,
-        'data': data
+        'value': value
     }
-
     return render(request, 'ehealthApp/home.html', context)
 
-@login_required
-def ehealth_about(request):
-    if request.user.is_practitioner==True:
-        tmp = 'ehealthApp/baseMed.html'
-    else:
-        tmp = 'ehealthApp/base.html'
 
-    profile = request.user.profile
-    return render(request, 'ehealthApp/about.html', {
-        'tmp': tmp,
-        'profile': profile })
+def ehealth_about(request):
+    if request.user.is_anonymous==True:
+        print('jumpp')
+        tmp = 'ehealthApp/base.html'
+        return render(request, 'ehealthApp/about.html', { 'tmp': tmp })
+
+    else:
+        if request.user.is_practitioner==True:
+            tmp = 'ehealthApp/baseMed.html'
+        else:
+            tmp = 'ehealthApp/base.html'
+        profile = request.user.profile
+    return render(request, 'ehealthApp/about.html', 
+    { 'tmp': tmp,
+      'profile': profile,
+      'value': value })
 
 
 @login_required
 def ehealth_tables(request):
-    #return render(request, 'ehealthApp/tables.html', {'ehealth_table': Profile.objects.all()})
-    table = ProfileTable(Profile.objects.all())
-    RequestConfig(request).configure(table)
     user_list = Profile.objects.all()
     user_filter = UserFilter(request.GET, queryset=user_list)
 
     return render(request, 'ehealthApp/tables.html', 
     {  
-    'table': table,
-    'filter': user_filter} )
+    'filter': user_filter, 
+    'value': value} )
 
 
 
-def search(request):
-    user_list = Profile.objects.all()
-    user_filter = UserFilter(request.GET, queryset=user_list)
-    return render(request, 'ehealthApp/filters.html', {'filter': user_filter})
+def ehealth_tables2(request):
+    #RequestConfig(request).configure(tables)
+    table = ProfileTable(Profile.objects.all())
+    return render(request, 'ehealthApp/tables2.html',  { 'table': table, 'value': value } )
+
 
 
 #This is the register view for normal Users
@@ -128,10 +128,10 @@ class Ehealth_registerMed(CreateView):
         messages.success(self.request, f"You are now a registered medical pactitioner, you have been logged in as {username}! Please Examine users Profiles and diagnose")
         return redirect('ehealth_home')
 
-#hy
-#This is the profile for regular users
+
 @login_required
 def ehealth_profile(request):
+    '''Regular User profile view'''
     if request.method == 'POST':
         updatemyform = UpdateMyForm(request.POST, request.FILES, instance=request.user.profile)
         profile_update = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -140,7 +140,6 @@ def ehealth_profile(request):
             updatemyform.save()
             messages.success(request, f'Account has been Updated')
             return redirect('ehealth_profile')
-        
     else:
         profile_update = ProfileUpdateForm(instance=request.user.profile)
         updatemyform = UpdateMyForm(instance=request.user.profile)
@@ -149,35 +148,19 @@ def ehealth_profile(request):
         'profile_update': profile_update,
         'updatemyform': updatemyform
     }
-
     return render(request, 'ehealthApp/profile.html', context)
 
 
 
-
 def get_data(request, *args, **kwargs):
-    users= User.objects.all()
-    Malaria_number, Diarrheal_number, Road_number, Tuberculosis_number, Cough_number = 0,0,0,0,0
-    for i in users:
-        if i.profile.Malaria=='Yes':
-            Malaria_number += 1
-        if i.profile.Diarrheal_Diseases=='Yes':
-            Diarrheal_number += 1
-        if i.profile.Road_Injuries=='Yes':
-            Road_number += 1
-        if i.profile.Tuberculosis=='Yes':
-            Tuberculosis_number += 1
-        if i.profile.Cough=='Yes':
-            Cough_number += 1
-    labels = ['Malaria', 'Diarrheal_Diseases', 'Road_Injuries', 'Tuberculosis','Cough']
-    value = [Malaria_number, Diarrheal_number, Road_number, Tuberculosis_number, Cough_number]
-
+    '''pass data to the chart'''
+    value_list = list(value.values())
+    lables_list = list(value.keys())
     data = {
-        "value": value,
-        "labels": labels, 
+        "value": value_list,
+        "labels": lables_list, 
     }
     return JsonResponse(data) # http response
 
 
     
-

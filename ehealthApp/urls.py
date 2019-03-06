@@ -14,7 +14,6 @@ urlpatterns = [
     path('tables/', views.ehealth_tables, name='ehealth_tables'),
     
     path('register/', views.Ehealth_register.as_view(template_name='ehealthApp/register.html'), name='ehealth_register'),
-    #path('register/', views.ehealth_register, name='ehealth_register'),
     path('registerMed/', views.Ehealth_registerMed.as_view(template_name='ehealthApp/registerMed.html'), name='ehealthMed_register'),
 
 
@@ -22,10 +21,9 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='ehealthApp/logout.html'), name='logout'),
     path('profile/', views.ehealth_profile, name='ehealth_profile'),
     url(r'^api/data/$', get_data, name='api-data'),
-    url(r'^search/$', views.search, name='search'),
+    path('tables2/', views.ehealth_tables2, name='ehealth_tables2'),
 
 ]
-
 
 #for debug mode only 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
