@@ -87,6 +87,7 @@
                         <h6 class="text-muted">{{ user.username }}</h6>
                         <p class="text-secondary">{{ user.email }}</p>
                         <a href="{% url 'ehealth_tables' %}" class="btn btn-outline-info mr-4" >View Users</a>
+                        <a href="{% url 'ehealth_tables2' %}" class="btn btn-outline-info mr-4" >View Full table</a>
                     </div>
                   </div>
                   <p class='text-muted'>You are logged in as a medical is practitioner <p>
@@ -94,12 +95,12 @@
                   </p>
                     <br><br>
                     <ul class="list-group">
-                      <li class="list-group-item list-group-item-light">Malaria:  {{ data.Malaria }}</li>
-                      <li class="list-group-item list-group-item-light">Diarrheal Diseases: {{ data.Diarrheal_Diseases }}</li>
-                      <li class="list-group-item list-group-item-light">Road Injuries: {{ data.Road_Injuries }}</li>
-                      <li class="list-group-item list-group-item-light">Tuberculosis: {{ data.Tuberculosis }}</li>
+                      <li class="list-group-item list-group-item-light">Malaria:  {{ value.Malaria }}</li>
+                      <li class="list-group-item list-group-item-light">Diarrheal Diseases: {{ value.Diarrheal_Diseases }}</li>
+                      <li class="list-group-item list-group-item-light">Road Injuries: {{ value.Road_Injuries }}</li>
+                      <li class="list-group-item list-group-item-light">Tuberculosis: {{ value.Tuberculosis }}</li>
                       
-                      <li class="list-group-item list-group-item-light">Cough: {{ data.Cough }}</li>
+                      <li class="list-group-item list-group-item-light">Cough: {{ value.Cough }}</li>
                     </ul>
                   
                   </p>

@@ -1,0 +1,14 @@
+
+{% extends "ehealthApp/baseMed.html" %}
+
+{% block content %}
+
+{% load render_table from django_tables2 %}
+
+<h6>
+    This table was rendered using <a href = "django-tables2.readthedocs.io/">render_table from django_tables2 </a>
+</h6>
+       <p>{% render_table table %}
+    </p> 
+
+{% endblock content %}
