@@ -1,5 +1,5 @@
 
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^api/data/$', get_data, name='api-data'),
     path('tables2/', views.ehealth_tables2, name='ehealth_tables2'),
 
+    #REST URL
+    path('api/ehealth/', include('ehealthApp.api.urls', 'ehealth_api'))
 ]
 
 #for debug mode only 
